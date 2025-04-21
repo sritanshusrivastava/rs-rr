@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Platform Setup - Set Up AI Agent Rules</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    
+    body {
+      background-color: #f5f7fa;
+      display: flex;
+      min-height: 100vh;
+    }
+    
+    .sidebar {
+      width: 240px;
+      background-color: white;
+      box-shadow: 2px 0 10px rgba(0, 0, 0, 0.05);
+      padding: 20px 0;
+      overflow-y: auto;
+    }
+    
+    .sidebar-header {
+      padding: 15px 20px;
+      font-weight: 600;
+      font-size: 18px;
+      color: #333;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .sidebar-icon {
+      background-color: #e8eeff;
+      color: #4f7cff;
+      border-radius: 6px;
+      width: 28px;
+      height: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+    }
+    
+    .menu-item {
+      padding: 12px 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      cursor: pointer;
+      color: #555;
+      font-size: 14px;
+      transition: all 0.3s ease;
+    }
+    
+    .menu-item:hover {
+      background-color: #f0f4ff;
+      color: #4f7cff;
+    }
+    
+    .menu-item.active {
+      background-color: #f0f4ff;
+      color: #4f7cff;
+      font-weight: 500;
+      border-left: 3px solid #4f7cff;
+    }
+    
+    .menu-icon {
+      width: 20px;
+      height: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .divider {
+      height: 1px;
+      background-color: #eee;
+      margin: 15px 0;
+    }
+    
+    .main-container {
+      flex: 1;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 20px;
+    }
+    
+    .page-title {
+      font-size: 20px;
+      font-weight: 600;
+      color: #333;
+    }
+    
+    .user-profile {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border: 1px solid #e0e0e0;
+      border-radius: 20px;
+      padding: 6px 12px;
+      background-color: #f9f9f9;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+    
+    .user-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background-color: black;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      color: white;
+    }
+    
+    .content-area {
+      flex: 1;
+      display: flex;
+      gap: 20px;
+    }
+    
+    .get-started {
+      flex: 1;
+      background-color: white;
+      border-radius: 8px;
+      padding: 20px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .get-started h2 {
+      font-size: 18px;
+      color: #333;
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .get-started p {
+      font-size: 14px;
+      color: #666;
+      margin-bottom: 20px;
+      line-height: 1.5;
+    }
+    
+    .step-list {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+    
+    .step-item {
+      display: flex;
+      gap: 15px;
+      align-items: flex-start;
+      padding: 15px 0;
+      border-bottom: 1px solid #f0f0f0;
+    }
+    
+    .step-circle {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      border: 2px solid #ddd;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      color: #888;
+      flex-shrink: 0;
+      background-color: white;
+    }
+    
+    .step-circle.completed {
+      background-color: #10b981;
+      border-color: #10b981;
+      color: white;
+    }
+    
+    .step-circle.active {
+      border-color: #4f7cff;
+      background-color: #4f7cff;
+      color: white;
+    }
+    
+    .step-content {
+      flex: 1;
+    }
+    
+    .step-title {
+      font-weight: 500;
+      color: #333;
+      font-size: 14px;
+      margin-bottom: 4px;
+    }
+    
+    .step-status {
+      font-size: 12px;
+      color: #888;
+    }
+    
+    .setup-area {
+      flex: 1.5;
+      background-color: white;
+      border-radius: 8px;
+      padding: 25px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .setup-header {
+      margin-bottom: 25px;
+    }
+    
+    .setup-header h2 {
+      font-size: 18px;
+      color: #333;
+      margin-bottom: 10px;
+    }
+    
+    .next-button {
+      background-color: #4f7cff;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      padding: 12px;
+      font-size: 15px;
+      font-weight: 500;
+      width: 100%;
+      cursor: pointer;
+      margin-top: auto;
+    }
+    
+    .next-button:hover {
+      background-color: #3a68e0;
+    }
+    
+    /* Styles for AI Agent Setup */
+    .form-group {
+      margin-bottom: 24px;
+    }
+    
+    .form-label {
+      display: block;
+      font-weight: 500;
+      margin-bottom: 8px;
+      font-size: 15px;
+      color: #333;
+    }
+    
+    .select-container {
+      position: relative;
+    }
+    
+    .select-field {
+      width: 100%;
+      padding: 10px 15px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      background-color: white;
+      font-size: 14px;
+      color: #333;
+      appearance: none;
+      cursor: pointer;
+    }
+    
+    .select-arrow {
+      position: absolute;
+      right: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      pointer-events: none;
+    }
+    
+    .toggle-switch {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 0;
+    }
+    
+    .toggle-label {
+      font-size: 14px;
+      font-weight: 500;
+      color: #333;
+    }
+    
+    .toggle-description {
+      font-size: 12px;
+      color: #777;
+      margin-top: 2px;
+    }
+    
+    .toggle {
+      position: relative;
+      display: inline-block;
+      width: 48px;
+      height: 24px;
+    }
+    
+    .toggle input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+    
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #ccc;
+      transition: .4s;
+      border-radius: 24px;
+    }
+    
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 18px;
+      width: 18px;
+      left: 3px;
+      bottom: 3px;
+      background-color: white;
+      transition: .4s;
+      border-radius: 50%;
+    }
+    
+    input:checked + .slider {
+      background-color: #4f7cff;
+    }
+    
+    input:checked + .slider:before {
+      transform: translateX(24px);
+    }
+  </style>
+</head>
+<body>
+  <div class="sidebar">
+    <div class="sidebar-header">
+      <div class="sidebar-icon">P</div>
+      Platform Setup
+    </div>
+    
+    <div class="menu-item active">
+      <div class="menu-icon">⚙️</div>
+      Platform Setup
+    </div>
+    
+    <div class="menu-item">
+      <div class="menu-icon">👤</div>
+      AI Agent
+    </div>
+    
+    <div class="menu-item">
+      <div class="menu-icon">📊</div>
+      Dashboard
+    </div>
+    
+    <div class="menu-item">
+      <div class="menu-icon">📢</div>
+      Campaigns
+    </div>
+    
+    <div class="menu-item">
+      <div class="menu-icon">💬</div>
+      Livestream
+    </div>
+    
+    <div class="menu-item">
+      <div class="menu-icon">👥</div>
+      Leads
+    </div>
+    
+    <div class="menu-item">
+      <div class="menu-icon">📄</div>
+      Reports
+    </div>
+    
+    <div class="divider"></div>
+    
+    <div class="menu-item">
+      <div class="menu-icon">⚙️</div>
+      Settings
+    </div>
+    
+    <div class="menu-item">
+      <div class="menu-icon">❓</div>
+      Help
+    </div>
+  </div>
+  
+  <div class="main-container">
+    <div class="header">
+      <div class="page-title">Platform Setup</div>
+      <div class="user-profile">
+        <span style="color: #777; font-size: 14px;">example@email.com</span>
+        <div class="user-avatar">CM</div>
+      </div>
+    </div>
+    
+    <div class="content-area">
+      <div class="get-started">
+        <h2>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#333" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <line x1="12" y1="8" x2="12" y2="16"></line>
+            <line x1="8" y1="12" x2="16" y2="12"></line>
+          </svg>
+          Get Started with ReferralHub
+        </h2>
+        <p>To get the best with better referrals & rewards, complete your account setup in these steps:</p>
+        
+        <div class="step-list">
+          <div class="step-item">
+            <div class="step-circle completed">✓</div>
+            <div class="step-content">
+              <div class="step-title">Set Up Business Profile</div>
+              <div class="step-status">Completed</div>
+            </div>
+          </div>
+          
+          <div class="step-item">
+            <div class="step-circle completed">✓</div>
+            <div class="step-content">
+              <div class="step-title">Sync Your Customer Data</div>
+              <div class="step-status">Completed</div>
+            </div>
+          </div>
+          
+          <div class="step-item">
+            <div class="step-circle active">3</div>
+            <div class="step-content">
+              <div class="step-title">Set Up AI Agent Rules</div>
+              <div class="step-status">In Progress</div>
+            </div>
+          </div>
+          
+          <div class="step-item">
+            <div class="step-circle">4</div>
+            <div class="step-content">
+              <div class="step-title">Set Up First Campaign</div>
+              <div class="step-status">Not Started</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="setup-area">
+        <div class="setup-header">
+          <h2>Set Up AI Agent Rules</h2>
+        </div>
+        
+        <form>
+          <div class="form-group">
+            <label class="form-label">Tone of Communication</label>
+            <div class="select-container">
+              <select class="select-field">
+                <option value="">Select</option>
+                <option value="friendly">Friendly</option>
+                <option value="professional">Professional</option>
+                <option value="casual">Casual</option>
+                <option value="formal">Formal</option>
+              </select>
+              <div class="select-arrow">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+              </div>
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label class="form-label">Response Style</label>
+            <div class="select-container">
+              <select class="select-field">
+                <option value="">Select</option>
+                <option value="concise">Concise</option>
+                <option value="detailed">Detailed</option>
+                <option value="conversational">Conversational</option>
+                <option value="technical">Technical</option>
+              </select>
+              <div class="select-arrow">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+              </div>
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <div class="toggle-switch">
+              <div>
+                <div class="toggle-label">Auto-offer help</div>
+                <div class="toggle-description">AI helpful suggestions automatically when user lands on a page</div>
+              </div>
+              <label class="toggle">
+                <input type="checkbox" checked>
+                <span class="slider"></span>
+              </label>
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <div class="toggle-switch">
+              <div>
+                <div class="toggle-label">User-initiated only</div>
+                <div class="toggle-description">AI only responds when clicked or messaged</div>
+              </div>
+              <label class="toggle">
+                <input type="checkbox">
+                <span class="slider"></span>
+              </label>
+            </div>
+          </div>
+          
+          <button type="submit" class="next-button">Next</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
